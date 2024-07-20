@@ -1,0 +1,16 @@
+.bg-form{
+    background: url('../../img/loginbg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 700px;
+    width: 100%;
+    background-position: bottom;
+}
+.bg-signupform{
+    background: url('../../img/loginbg2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 700px;
+    width: 100%;
+    background-position: bottom;
+}
