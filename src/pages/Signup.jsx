@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import googleIcon from '../img/google.png';
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -21,6 +22,20 @@ const Signup = () => {
 
     const handleClickshowPassword = () => {
         setShowPassword((show) => !show);
+    }
+     const handleGoogleSuccess = async (credentialResponse) => {
+        const tokenId = credentialResponse.credential;
+        try {
+            const response = await axios.post('https://recipegenerate-backend.onrender.com/api/users/google', { tokenId });
+            if (response.data.success) {
+                toast.success("Google login successful");
+                navigate('/');
+            } else {
+                toast.error("Google login failed");
+            }
+        } catch (error) {
+            toast.error("Error during Google login: " + error.message);
+        }
     }
 
     const validate = () => {
@@ -41,11 +56,14 @@ const Signup = () => {
         })
     }
 
+    const handleGoogleSignin=()=>{
+        window.location.href = "https://recipegenerate-backend.onrender.com/api/users/google";
+    }
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         if (validate()) {
             try {
-                const response = await axios.post('https://recipegenerate-backend.onrender.com/api/users/register', formData);
+                 await axios.post('https://recipegenerate-backend.onrender.com/api/users/register', formData);
                 toast.success("signup successfull");
                 navigate('/login');
             } catch (error) {
@@ -126,11 +144,15 @@ const Signup = () => {
                                     <Button type="submit" variant="contained" color="secondary">Signup</Button>
                                 </Box>
                             </form>
-                            <Box mt={4}>
-                                <Typography sx={{ fontSize: "14px", color: "gray" }} variant="p">Or login with</Typography>
+                            <Box mt={4} textAlign="center">
+                                <Typography sx={{ fontSize: "16px", color: "gray" }} variant="p">OR</Typography>
                                 <Box display="flex" flexDirection="row" justifyContent="space-evenly" mt={2}>
-                                    <Chip label="Facebook" icon={<FacebookOutlined sx={{ fill: "#3b5998", fontSize: "19px" }} />} />
-                                    <Chip label="Google" icon={<Google sx={{ fill: "#dd4b39", fontSize: "19px" }} />} />
+                                    {/* <Chip label="Facebook" icon={<FacebookOutlined sx={{ fill: "#3b5998", fontSize: "19px" }} />} />
+                                    <Chip label="Google" icon={<Google sx={{ fill: "#dd4b39", fontSize: "19px" }} />} /> */}
+                                     <button className="googlebtn" onClick={handleGoogleSignin}><span style={{marginRight:"10px"}}>
+                                           <img src={googleIcon} width="24px" alt="" />
+                                        </span>  Google</button>
+                                    
                                 </Box>
                             </Box>
                             <Box mt={3}>

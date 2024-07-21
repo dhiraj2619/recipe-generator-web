@@ -7,7 +7,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/Authcontext';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import googleIcon from '../img/google.png';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +47,7 @@ const Login = () => {
     if (validate()) {
       try {
         const response = await axios.post('https://recipegenerate-backend.onrender.com/api/users/login', formData);
-  
+
         if (response.status === 200) {
           const { token, userId } = response.data;
           login(token, userId);
@@ -55,19 +55,19 @@ const Login = () => {
           navigate('/');
         }
       } catch (error) {
-         if(error.response){
-           const errorMessage = error.response.data.message;
-           if(errorMessage === "user not found with this email id"){
+        if (error.response) {
+          const errorMessage = error.response.data.message;
+          if (errorMessage === "user not found with this email id") {
             toast.error("User not found with this email ID");
-           }
-           else if(errorMessage === "invalid password"){
-             toast.error("Invalid password");
-           }
-           else {
+          }
+          else if (errorMessage === "invalid password") {
+            toast.error("Invalid password");
+          }
+          else {
             toast.error("Login failed");
           }
-         }
-         else if (error.request) {
+        }
+        else if (error.request) {
           toast.error("Network error: No response received from server");
         } else {
           toast.error("Error: " + error.message);
@@ -77,8 +77,11 @@ const Login = () => {
       toast.error("Please fill in all required fields.");
     }
   };
-  
-  
+
+  const handleGoogleSignin = () => {
+    window.location.href = "https://recipegenerate-backend.onrender.com/api/users/google";
+  }
+
 
   return (
     <div className="bg-form">
@@ -129,8 +132,9 @@ const Login = () => {
               <Box mt={4}>
                 <Typography sx={{ fontSize: "14px", color: "gray" }} variant="p">Or login with</Typography>
                 <Box display="flex" flexDirection="row" justifyContent="space-evenly" mt={2}>
-                  <Chip label="Facebook" icon={<FacebookOutlined sx={{ fill: "#3b5998", fontSize: "19px" }} />} />
-                  <Chip label="Google" icon={<Google sx={{ fill: "#dd4b39", fontSize: "19px" }} />} />
+                  <button className="googlebtn" onClick={handleGoogleSignin}><span style={{ marginRight: "10px" }}>
+                    <img src={googleIcon} width="24px" alt="" />
+                  </span>  Google</button>
                 </Box>
               </Box>
               <Box mt={3}>
