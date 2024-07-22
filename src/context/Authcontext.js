@@ -12,8 +12,10 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
+        const googleToken = localStorage.getItem('googleToken');
+        // const googleUserId = localStorage.getItem('googleUserId');
 
-        if (token && userId) {
+        if ((token && userId)|| (googleToken)) {
             setIsAuthenticated(true);
         }
     }, []);
@@ -26,15 +28,24 @@ const AuthProvider = ({ children }) => {
         navigate('/');
     }
 
+    const googleLogin=(googleToken,googleUserId)=>{
+        localStorage.setItem('googleToken',googleToken);
+        // localStorage.setItem('googleUserId',googleUserId);
+        setIsAuthenticated(true);
+        navigate('/');
+    }
+
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
+        localStorage.removeItem('googleToken');
+        // localStorage.removeItem('googleUserId');
         setIsAuthenticated(false);
         setUser(null);
         navigate('/')
     }
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, login,googleLogin, logout }}>
             {children}
         </AuthContext.Provider>
     )

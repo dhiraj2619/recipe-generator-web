@@ -1,10 +1,13 @@
-import React,{useState} from 'react';
-import { AppBar, Box, Toolbar, Typography, Button,  Link as MuiLink } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
+import React,{useContext, useState} from 'react';
+import { AppBar, Box, Toolbar, Typography, Button,  Link as MuiLink, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/Authcontext';
 
 const Navbar = () => {
     const [anchorEl, setAnchorEl] = useState(null);
+    const navigate = useNavigate();
+    const {isAuthenticated,logout} = useContext(AuthContext);
+
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -13,6 +16,12 @@ const Navbar = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleLogout=()=>{
+        logout();
+        handleClose();
+        navigate('/');
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -23,10 +32,32 @@ const Navbar = () => {
                             RecipeGen
                         </MuiLink>
                     </Typography>
-                    <div>
-                      
+                    {isAuthenticated ? (
+                        <div>
+                            <IconButton onClick={handleMenu} color="inherit">
+                                <Avatar alt="Profile" src="/static/images/avatar/1.jpg" />
+                            </IconButton>
+                            <Menu
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            </Menu>
+                        </div>
+                    ) : (
                         <Button color="inherit" component={Link} to="/login">Login</Button>
-                    </div>
+                    )}
                 </Toolbar>
             </AppBar>
         </Box>

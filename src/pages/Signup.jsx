@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Button, Chip, Container, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
-import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, Button, Container, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
@@ -23,20 +23,7 @@ const Signup = () => {
     const handleClickshowPassword = () => {
         setShowPassword((show) => !show);
     }
-     const handleGoogleSuccess = async (credentialResponse) => {
-        const tokenId = credentialResponse.credential;
-        try {
-            const response = await axios.post('https://recipegenerate-backend.onrender.com/api/users/google', { tokenId });
-            if (response.data.success) {
-                toast.success("Google login successful");
-                navigate('/');
-            } else {
-                toast.error("Google login failed");
-            }
-        } catch (error) {
-            toast.error("Error during Google login: " + error.message);
-        }
-    }
+  
 
     const validate = () => {
         let tempErrors = {};
@@ -147,8 +134,7 @@ const Signup = () => {
                             <Box mt={4} textAlign="center">
                                 <Typography sx={{ fontSize: "16px", color: "gray" }} variant="p">OR</Typography>
                                 <Box display="flex" flexDirection="row" justifyContent="space-evenly" mt={2}>
-                                    {/* <Chip label="Facebook" icon={<FacebookOutlined sx={{ fill: "#3b5998", fontSize: "19px" }} />} />
-                                    <Chip label="Google" icon={<Google sx={{ fill: "#dd4b39", fontSize: "19px" }} />} /> */}
+                                  
                                      <button className="googlebtn" onClick={handleGoogleSignin}><span style={{marginRight:"10px"}}>
                                            <img src={googleIcon} width="24px" alt="" />
                                         </span>  Google</button>

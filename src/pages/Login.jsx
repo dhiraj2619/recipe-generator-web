@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import '../css/pagecss/Login.css';
-import { Box, Button, Chip, Container, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
-import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, Button, Container, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
+import {Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/Authcontext';
@@ -18,7 +18,7 @@ const Login = () => {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const handleClickshowPassword = () => {
     setShowPassword((show) => !show);
@@ -51,7 +51,7 @@ const Login = () => {
         if (response.status === 200) {
           const { token, userId } = response.data;
           login(token, userId);
-          toast.success("Login successful");
+          
           navigate('/');
         }
       } catch (error) {
