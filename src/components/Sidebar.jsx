@@ -1,4 +1,4 @@
-import { Box, Button, Chip, CircularProgress, Drawer, List, Typography } from '@mui/material'
+import { Box, Button, Chip,List, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { themeContext } from '../context/ThemeContext'
 import axios from 'axios';
@@ -65,7 +65,7 @@ const Sidebar = () => {
 
 
   const handleGenerateRecipes = async () => {
-    if (selectedVegies.length >= 3 && selectedIngredients.length >= 3) {
+    if (selectedVegies.length >= 3 && selectedIngredients.length >= 2) {
       try {
         const response = await axios.post('https://recipegenerate-backend.onrender.com/api/recipes/match', {
           vegies: selectedVegies,
@@ -78,7 +78,7 @@ const Sidebar = () => {
           return matchedVegies.length >= 3 && matchedIngredients.length >= 2;
         })
 
-        navigate('/generatedRecipes', { state: { recipes: filterdRecipes } })
+        navigate('/generatedRecipes', { state: { recipes: filterdRecipes,selectedVegies,selectedIngredients } })
 
       } catch (error) {
         console.error("Error generating recipes", error);
@@ -90,7 +90,12 @@ const Sidebar = () => {
 
   }
 
-  const isGerneratedButtonDisabled = selectedVegies.length >= 3 && selectedIngredients.length >= 3;
+  const handleResetAll=()=>{
+    setSelectedVegies([]);
+    setSelectedIngredients([]);
+  }
+
+  const isGerneratedButtonDisabled = selectedVegies.length >= 3 && selectedIngredients.length >= 2;
   return (
     <Box className="sidebar"
       sx={{
@@ -100,36 +105,39 @@ const Sidebar = () => {
         zIndex: 1,
       }}
     >
-      {loading ? (<Box sx={{height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
-        <ScaleLoader size={20} color="#8a2be2"/>
-      </Box>) : 
-      (<>
-        <List component="nav" sx={{ padding: 2 }}>
+      {loading ? (<Box sx={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <ScaleLoader size={20} color="#8a2be2" />
+      </Box>) :
+        (<>
+          <List component="nav" sx={{ padding: 2 }}>
 
-          <Box my={2} >
-            <Typography sx={{ fontSize: "16px" }} component="div" mb={2}>Vegies/non veg</Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: "5" }}>
-              {[...uniqueIngredients].map((vegie, index) => (
-                <Chip key={index} label={vegie} sx={{ margin: "5px", fontSize: "12px" }} color={selectedVegies.includes(vegie) ? 'success' : 'default'} onClick={() => handleVegieClick(vegie)} />
-              ))}
+            <Box my={2} >
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Typography sx={{ fontSize: "16px" }} component="div">Vegies/non veg</Typography>
+                <Button onClick={handleResetAll}>Reset all</Button>
+              </Box>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: "5" }}>
+                {[...uniqueIngredients].map((vegie, index) => (
+                  <Chip key={index} label={vegie} sx={{ margin: "5px", fontSize: "12px" }} color={selectedVegies.includes(vegie) ? 'success' : 'default'} onClick={() => handleVegieClick(vegie)} />
+                ))}
+              </Box>
             </Box>
-          </Box>
 
-          <Box my={2}>
-            <Typography sx={{ fontSize: "16px" }} component="div" mb={2}>Main ingredients</Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: "5" }}>
-              {[...uniqueMainIngredients].map((ingredient, index) => (
-                <Chip key={index} label={ingredient} sx={{ margin: "5px", fontSize: "12px" }} color={selectedIngredients.includes(ingredient) ? 'primary' : 'default'} onClick={() => handleIngredientsClick(ingredient)} />
-              ))}
+            <Box my={2}>
+              <Typography sx={{ fontSize: "16px" }} component="div" mb={2}>Main ingredients</Typography>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: "5" }}>
+                {[...uniqueMainIngredients].map((ingredient, index) => (
+                  <Chip key={index} label={ingredient} sx={{ margin: "5px", fontSize: "12px" }} color={selectedIngredients.includes(ingredient) ? 'primary' : 'default'} onClick={() => handleIngredientsClick(ingredient)} />
+                ))}
+              </Box>
             </Box>
+
+
+          </List>
+          <Box sx={{ bgcolor: mode === 'light' ? "white" : "#2b2a2a", height: "80px", boxShadow: "15", borderTopLeftRadius: "30px", borderTopRightRadius: "30px", textAlign: "center", position: "sticky", bottom: "-1px" }}>
+            <Button className="gen_btn" disabled={!isGerneratedButtonDisabled} onClick={handleGenerateRecipes}>Generate</Button>
           </Box>
-
-
-        </List>
-        <Box sx={{ bgcolor: mode === 'light' ? "white" : "#2b2a2a", height: "80px", boxShadow: "15", borderTopLeftRadius: "30px", borderTopRightRadius: "30px", textAlign: "center", position: "sticky", bottom: "-1px" }}>
-          <Button className="gen_btn" disabled={!isGerneratedButtonDisabled} onClick={handleGenerateRecipes}>Generate</Button>
-        </Box>
-      </>)}
+        </>)}
 
     </Box>
 

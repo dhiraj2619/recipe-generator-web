@@ -10,6 +10,7 @@ import { themeContext } from './context/ThemeContext'
 import GeneratedRecipes from './pages/GeneratedRecipes'
 import PublicRoute from './PublicRoute'
 import PrivateRoute from './PrivateRoute'
+import Getfullrecipe from './pages/Getfullrecipe'
 
 
 const AllRoute = () => {
@@ -33,6 +34,16 @@ const AllRoute = () => {
         <Route path='/generatedRecipes' element={<PrivateRoute>
           <ThemeProvider theme={theme}> <CssBaseline /><MainLayout> <GeneratedRecipes /></MainLayout>  </ThemeProvider>
         </PrivateRoute>} />
+        <Route path='/getfullrecipe' element={
+          <PrivateRoute>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <MainLayout>
+                <Getfullrecipe />
+              </MainLayout>
+            </ThemeProvider>
+          </PrivateRoute>
+        } />
       </Routes>
     </>
   )

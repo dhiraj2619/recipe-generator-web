@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/Authcontext';
 import { AccountCircle, DarkMode, LightMode } from '@mui/icons-material';
 import { themeContext } from '../context/ThemeContext';
+import logoImage from '../img/cookbook.png';
 
 const Navbar = () => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -29,10 +30,11 @@ const Navbar = () => {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" sx={{ bgcolor: mode === 'light' ? '#e4e8ec' : '#030202', color: mode === 'light' ? '#030202' : 'white', boxShadow: "0" }}>
-                <Toolbar>
+                <Toolbar >
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <MuiLink component={Link} to="/" underline="none" color="inherit">
-                            RecipeGen
+                        <MuiLink component={Link} to="/" underline="none" display="flex" alignItems="center">
+                           <img src={logoImage} alt="" width="50px"/> 
+                           <span style={{color:mode==="light"?"black":"white",marginLeft:"10px"}}>RecipeGenerator</span>
                         </MuiLink>
                     </Typography>
                     <IconButton>
