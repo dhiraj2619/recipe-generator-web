@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, Button, Container, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import googleIcon from '../img/google.png';
+import { AuthContext } from '../context/Authcontext';
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -17,8 +18,15 @@ const Signup = () => {
     });
 
     const [errors, setErrors] = useState({});
+    const {isAuthenticated} = useContext(AuthContext);
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+       if(isAuthenticated){
+         navigate('/')
+       }
+    },[isAuthenticated,navigate]);
 
     const handleClickshowPassword = () => {
         setShowPassword((show) => !show);

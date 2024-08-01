@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../css/pagecss/Login.css';
-import { Box, Button, Container, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
-import {Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, Button, CircularProgress, Container, FormControl, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/Authcontext';
@@ -15,10 +15,18 @@ const Login = () => {
     email: "",
     password: ""
   });
+  const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login, isAuthenticated } = useContext(AuthContext);
+
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate])
 
   const handleClickshowPassword = () => {
     setShowPassword((show) => !show);
@@ -45,13 +53,14 @@ const Login = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
+      setLoading(true);
       try {
         const response = await axios.post('https://recipegenerate-backend.onrender.com/api/users/login', formData);
 
         if (response.status === 200) {
           const { token, userId } = response.data;
           login(token, userId);
-          
+
           navigate('/');
         }
       } catch (error) {
@@ -72,6 +81,9 @@ const Login = () => {
         } else {
           toast.error("Error: " + error.message);
         }
+      }
+      finally{
+        setLoading(false);
       }
     } else {
       toast.error("Please fill in all required fields.");
@@ -126,7 +138,8 @@ const Login = () => {
                   </FormControl>
                 </Box>
                 <Box mt={3}>
-                  <Button type="submit" variant="contained" color="secondary">Login</Button>
+                  <Button type="submit" variant="contained" color="secondary" disabled={loading}>
+                    {loading ? <CircularProgress size={24} color="inherit"/>:'Login'}</Button>
                 </Box>
               </form>
               <Box mt={4}>

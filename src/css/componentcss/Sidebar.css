@@ -1,0 +1,31 @@
+::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #b1b0b0; 
+    border-radius: 10px;
+  }
+
+  .sidebar{
+    max-height: 525px;
+    width: 450px;
+    overflow-y: scroll;
+  }
+  .gen_btn{
+    background-color: blueviolet !important;
+    color: white !important;
+    font-size: 14px !important;
+    padding: 10px 20px !important;
+    border-radius: 30px !important;
+    margin-top: 15px !important;
+  }
+  .gen_btn:disabled{
+    opacity: .3;
+  }

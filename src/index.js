@@ -6,19 +6,23 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/Authcontext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import ThemeContextProvider from './context/ThemeContext';
 
 
-const clientId = process.env.Google_client_id; 
+const clientId = process.env.Google_client_id;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <BrowserRouter>
-    <AuthProvider>
-      <GoogleOAuthProvider clientId={clientId}>
-        <App />
-      </GoogleOAuthProvider>
-    </AuthProvider>
+    <ThemeContextProvider>
+      <AuthProvider>
+        <GoogleOAuthProvider clientId={clientId}>
+          <App />
+        </GoogleOAuthProvider>
+      </AuthProvider>
+    </ThemeContextProvider>
+
   </BrowserRouter>
 );
 

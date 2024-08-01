@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,13 +14,24 @@ const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
         const googleToken = localStorage.getItem('googleToken');
-        // const googleUserId = localStorage.getItem('googleUserId');
-
+        
         if ((token && userId)|| (googleToken)) {
             setIsAuthenticated(true);
+            fetchUserData(token,userId);
         }
     }, []);
 
+    const fetchUserData=async(token,userId)=>{
+          try { 
+              const response = await axios.get(`https://recipegenerate-backend.onrender.com/api/users/user/${userId}`,{
+                headers:{Authorization:`Bearer ${token}`}
+              });
+              setUser(response.data.user);
+              console.log(response.data.user);
+          } catch (error) {
+            console.error("Error fetching the user data:", error.response ? error.response.data : error.message);
+          }
+    }
 
     const login = (token, userId) => {
         localStorage.setItem('token', token);
@@ -30,7 +42,6 @@ const AuthProvider = ({ children }) => {
 
     const googleLogin=(googleToken,googleUserId)=>{
         localStorage.setItem('googleToken',googleToken);
-        // localStorage.setItem('googleUserId',googleUserId);
         setIsAuthenticated(true);
         navigate('/');
     }
@@ -39,7 +50,6 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         localStorage.removeItem('googleToken');
-        // localStorage.removeItem('googleUserId');
         setIsAuthenticated(false);
         setUser(null);
         navigate('/')
